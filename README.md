@@ -31,54 +31,26 @@ Serialização: O pipeline completo (pré-processador + melhor modelo) é guarda
 Serviço da API: A aplicação FastAPI (main.py) carrega este ficheiro para disponibilizar as predições através de um endpoint POST. 
 
 🛠️ Tecnologias Utilizadas
-Tecnologia
+Python: Linguagem principal do projeto.
+FastAPI :Framework web para a construção da API.
+Uvicorn :Servidor ASGI para executar a API.
+Scikit-learn :Biblioteca para o treino e avaliação do modelo.
+Pandas :Utilizado para a manipulação e análise dos dados.
+Joblib :Para carregar e guardar o modelo treinado.
 
-Descrição
-
-Python
-
-Linguagem principal do projeto.
-
-FastAPI
-
-Framework web para a construção da API.
-
-Uvicorn
-
-Servidor ASGI para executar a API.
-
-Scikit-learn
-
-Biblioteca para o treino e avaliação do modelo.
-
-Pandas
-
-Utilizado para a manipulação e análise dos dados.
-
-Joblib
-
-Para carregar e guardar o modelo treinado.
-
-
-Exportar para as Planilhas
 ⚙️ Instalação e Execução
 Siga estes passos para configurar e executar o projeto localmente.
 
-Pré-requisitos
+Pré-requisitos:
 Python 3.7+
-
 Pip
 
 Passos
 Clone o repositório:
 
-Bash
-
 git clone <URL_DO_SEU_REPOSITORIO>
 cd <NOME_DO_DIRETORIO>
 Crie e ative um ambiente virtual:
-
-Bash
 
 python -m venv venv
 # No macOS/Linux:
@@ -87,19 +59,13 @@ source venv/bin/activate
 .\venv\Scripts\activate
 Instale as dependências a partir do requirements.txt:
 
-Bash
-
 pip install -r requirements.txt
 Treine o modelo:
 
 ⚠️ Importante: Este passo é obrigatório na primeira execução. Certifique-se de que o ficheiro alzheimers_disease_data.csv está na raiz do projeto.
 
-Bash
-
 python train_model.py
 Inicie o servidor da API:
-
-Bash
 
 uvicorn main:app --reload
 A API estará agora a correr em http://127.0.0.1:8000 e a documentação interativa (Swagger UI) em http://127.0.0.1:8000/docs.
