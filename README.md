@@ -1,72 +1,120 @@
-API de Predição da Doença de Alzheimer
-Uma API para prever a probabilidade de diagnóstico da Doença de Alzheimer com base em dados clínicos e de estilo de vida. 
+🧠 API de Predição da Doença de Alzheimer
+Uma API RESTful de alta performance construída com FastAPI para prever a probabilidade de diagnóstico da Doença de Alzheimer, utilizando um modelo de machine learning treinado com dados clínicos e de estilo de vida.
+
+🚀 Sobre o Projeto
+Este projeto disponibiliza uma interface simples e eficaz para interagir com um modelo preditivo de Alzheimer. A API permite que aplicações frontend ou outros serviços submetam dados de um paciente e recebam, em tempo real, um diagnóstico provável e as respetivas probabilidades.
+
+O objetivo é fornecer uma ferramenta que possa auxiliar profissionais de saúde e investigadores, demonstrando o poder da aprendizagem automática na área da saúde.
+
+✨ Como Funciona
+O core do projeto é um pipeline de machine learning que automatiza todo o processo, desde o pré-processamento dos dados até à predição.
+
+Carregamento e Limpeza de Dados: O script train_model.py carrega o dataset alzheimers_disease_data.csv.
+
+Pré-processamento:
+
+Colunas irrelevantes (PatientID, DoctorInCharge) são removidas.
+
+Valores em falta são preenchidos com a mediana da respetiva coluna.
+
+As características numéricas são escalonadas utilizando StandardScaler para normalizar a sua distribuição, o que é crucial para o desempenho do modelo.
+
+Treino do Modelo:
+
+Um RandomForestClassifier é utilizado devido à sua robustez e alto desempenho.
+
+GridSearchCV é aplicado para testar diferentes combinações de hiperparâmetros e encontrar a melhor configuração com base na métrica f1_weighted.
+
+Serialização: O pipeline completo (pré-processador + melhor modelo) é guardado no ficheiro alzheimer_model_pipeline.joblib utilizando joblib.
+
+
+Serviço da API: A aplicação FastAPI (main.py) carrega este ficheiro para disponibilizar as predições através de um endpoint POST. 
+
+🛠️ Tecnologias Utilizadas
+Tecnologia
 
 Descrição
-Este projeto consiste numa API desenvolvida com FastAPI que serve um modelo de machine learning treinado para prever a probabilidade de um paciente ter a Doença de Alzheimer. O modelo utiliza um conjunto de dados clínicos e de estilo de vida para fazer as previsões.
 
-A API disponibiliza um endpoint para submeter os dados de um paciente e receber como resposta o diagnóstico previsto (positivo ou negativo) e as probabilidades associadas.
-
-Tecnologias Utilizadas
 Python
 
+Linguagem principal do projeto.
 
-FastAPI: para a construção da API. 
+FastAPI
 
-scikit-learn: para o treino e avaliação do modelo de machine learning.
+Framework web para a construção da API.
+
+Uvicorn
+
+Servidor ASGI para executar a API.
+
+Scikit-learn
+
+Biblioteca para o treino e avaliação do modelo.
+
+Pandas
+
+Utilizado para a manipulação e análise dos dados.
+
+Joblib
+
+Para carregar e guardar o modelo treinado.
 
 
-Pandas: para manipulação e pré-processamento de dados. 
+Exportar para as Planilhas
+⚙️ Instalação e Execução
+Siga estes passos para configurar e executar o projeto localmente.
 
+Pré-requisitos
+Python 3.7+
 
-Joblib: para carregar e guardar o modelo treinado. 
+Pip
 
-Uvicorn: para correr o servidor da API.
-
-Instalação
+Passos
 Clone o repositório:
 
 Bash
 
 git clone <URL_DO_SEU_REPOSITORIO>
 cd <NOME_DO_DIRETORIO>
-Crie e ative um ambiente virtual (recomendado):
+Crie e ative um ambiente virtual:
 
 Bash
 
 python -m venv venv
-source venv/bin/activate  # No Windows use `venv\Scripts\activate`
-Instale as dependências:
+# No macOS/Linux:
+source venv/bin/activate
+# No Windows:
+.\venv\Scripts\activate
+Instale as dependências a partir do requirements.txt:
 
 Bash
 
 pip install -r requirements.txt
-Utilização
-1. Treinar o Modelo
-Antes de iniciar a API, é necessário treinar o modelo. O script train_model.py encarrega-se de carregar os dados, pré-processá-los, treinar um modelo RandomForestClassifier com GridSearchCV para encontrar os melhores hiperparâmetros e, por fim, guardar o pipeline do modelo treinado no ficheiro alzheimer_model_pipeline.joblib.
+Treine o modelo:
 
-Para treinar o modelo, execute o seguinte comando no seu terminal:
+⚠️ Importante: Este passo é obrigatório na primeira execução. Certifique-se de que o ficheiro alzheimers_disease_data.csv está na raiz do projeto.
 
 Bash
 
 python train_model.py
-Certifique-se de que o ficheiro alzheimers_disease_data.csv se encontra no mesmo diretório.
-
-2. Iniciar a API
-Após o treino do modelo, o ficheiro alzheimer_model_pipeline.joblib será gerado. Agora, pode iniciar a API com o Uvicorn:
+Inicie o servidor da API:
 
 Bash
 
 uvicorn main:app --reload
-A API estará disponível em http://127.0.0.1:8000.
+A API estará agora a correr em http://127.0.0.1:8000 e a documentação interativa (Swagger UI) em http://127.0.0.1:8000/docs.
 
-Endpoints da API
-A API possui os seguintes endpoints:
+API Endpoints
+A API fornece dois endpoints principais.
 
 GET /
+Endpoint de boas-vindas para verificar o estado da API e do modelo.
 
-Descrição: Endpoint de boas-vindas que exibe uma mensagem e o estado do modelo. 
+URL: /
 
-Resposta de Sucesso (código 200):
+Método: GET
+
+Resposta de Sucesso:
 
 JSON
 
@@ -75,10 +123,13 @@ JSON
   "model_status": "Modelo carregado com sucesso."
 }
 POST /predict
+Realiza a predição com base nos dados do paciente fornecidos.
 
-Descrição: Recebe os dados de um paciente em formato JSON e retorna a previsão do diagnóstico. 
+URL: /predict
 
-Corpo do Pedido:
+Método: POST
+
+Corpo do Pedido (Exemplo):
 
 JSON
 
@@ -116,7 +167,7 @@ JSON
   "DifficultyCompletingTasks": 1,
   "Forgetfulness": 1
 }
-Resposta de Sucesso (código 200):
+Resposta de Sucesso:
 
 JSON
 
@@ -126,5 +177,5 @@ JSON
   "probability_negative": 0.3456,
   "probability_positive": 0.6544
 }
-Dataset
-O modelo foi treinado com o conjunto de dados alzheimers_disease_data.csv, que contém informações demográficas, de estilo de vida, historial clínico e resultados de testes cognitivos de pacientes.
+📄 Licença
+Este projeto está licenciado sob a Licença MIT. Consulte o ficheiro LICENSE para mais detalhes.
